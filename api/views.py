@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.models import Challenge, GroupPurchase, Vegan, CO2Cal
 from api.serializers import ChallengeSerializer, GroupPurchaseSerializer, VeganSerializer, SignUpSerializer, \
@@ -26,7 +26,7 @@ class SignUpView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             # jwt token 접근해주기
-            token = TokenObtainPairSerializer.get_token(user)
+            token = RefreshToken.for_user(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
             return Response(
@@ -52,7 +52,7 @@ class SigninView(APIView):
         )
         if user is not None:
             serializer = UserSerializer(user)
-            token = TokenObtainPairSerializer.get_token(user)
+            token = RefreshToken.for_user(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
             return Response(
