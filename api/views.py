@@ -5,14 +5,13 @@ from datetime import timedelta
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+# from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from api.models import Challenge, GroupPurchase, Vegan, CO2Cal
-from api.serializers import ChallengeSerializer, GroupPurchaseSerializer, VeganSerializer, SignUpSerializer, \
-    UserSerializer, CO2CalSerializer
+from api.models import *
+from api.serializers import *
 
 class TestView(APIView):
     def get(self, request):
@@ -29,7 +28,7 @@ class SignUpView(APIView):
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
-            return Response(
+            res = Response (
                 {
                     "user": serializer.data,
                     "token": {
@@ -39,6 +38,7 @@ class SignUpView(APIView):
                 },
                 status=200,
             )
+            return res
             # res.set_cookie("access", access_token, httponly=True)
             # res.set_cookie("refresh", refresh_token, httponly=True)
         return Response(serializer.errors, status=400)
