@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -36,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    created_at = models.DateTimeField(default=timezone.now)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -58,7 +60,7 @@ class Vegan(models.Model):
         ('NonVegan', 'NonVegan'),
     ]
     level = models.CharField(max_length=11, choices=VEGAN_LEVEL_CHOICE, null=False, blank=False)
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    created_at = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -82,7 +84,7 @@ class Challenge(models.Model):
     check_method = models.CharField(max_length=50, null=False, blank=False)
     money = models.IntegerField(default=0, null=False, blank=False)
     chat_link = models.CharField(max_length=100, null=False, blank=False)
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    created_at = models.DateTimeField(default=timezone.now)
     finished = models.BooleanField(default=False)
 
     class Meta:
@@ -95,7 +97,7 @@ class GroupPurchase(models.Model):
     people_num = models.IntegerField(default=0)
     product_link = models.CharField(max_length=100, null=False, blank=False)
     chat_link = models.CharField(max_length=100, null=False, blank=False)
-    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    created_at = models.DateTimeField(default=timezone.now)
     finished = models.BooleanField(default=False)
     price = models.IntegerField(default=0)
 

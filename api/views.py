@@ -185,9 +185,7 @@ class VeganCalView(APIView):
         veganserializer = VeganSerializer(veglevel)
 
         lev = foodtoCO2(foods)
-        print(lev)
         co2level, check = CO2Cal.objects.update_or_create(user=request.user, level=lev)
-        print(co2level)
         co2calserializer = CO2CalSerializer(co2level)
         return JsonResponse(
             {
