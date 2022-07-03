@@ -154,7 +154,7 @@ class VeganCalView(APIView):
         user = request.user
         end_date = datetime.datetime.now()
         start_date = end_date - timedelta(days=7)
-        veglevels = Vegan.objects.filter(user=user, created_at__range=(start_date, end_date))
+        veglevels = Vegan.objects.filter(user=user, created_at__range=(start_date, end_date)).order_by('created_at')
         veganserializer = VeganSerializer(veglevels, many=True)
 
         co2level = CO2Cal.objects.get(user=user)
@@ -185,7 +185,9 @@ class VeganCalView(APIView):
         veganserializer = VeganSerializer(veglevel)
 
         lev = foodtoCO2(foods)
-        co2level, check = CO2Cal.objects.update_or_create(user=request.user, level=lev)
+        co2level= CO2Cal.objects.get(user=request.user)
+        co2level.level = lev
+        co2level.save()
         co2calserializer = CO2CalSerializer(co2level)
         return JsonResponse(
             {
